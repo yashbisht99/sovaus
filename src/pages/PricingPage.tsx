@@ -1,110 +1,277 @@
 import { Link } from "react-router-dom";
-import { CTA, SectionLabel } from "@/components/sova/Marketing";
+import { useState } from "react";
+import { SectionLabel } from "@/components/sova/Marketing";
 
-const FEATURES = [
-  ["Competitor tracking — 5 storefronts", true],
-  ["Hourly catalog scans", true],
-  ["Real-time pricing recommendations", true],
-  ["What-if pricing simulator", true],
-  ["One-click apply to Shopify", true],
-  ["Assortment gap detection", true],
-  ["Quarterly assortment score", true],
-  ["AI launch brief generation", true],
-  ["Weekly intelligence reports (PDF)", true],
-  ["Live market feed", true],
-  ["Ad creative library", true],
-  ["Slack & email digests", true],
-  ["Audit trail with rollback", true],
-  ["SOC 2 Type II + GDPR", true],
-  ["Email + chat support", true],
+const PLANS = [
+  {
+    name: "Starter",
+    price: { monthly: 29, yearly: 24 },
+    description: "Perfect for small teams getting started with competitive intelligence",
+    features: [
+      { name: "Competitors tracked", value: "3" },
+      { name: "Price scans", value: "Daily" },
+      { name: "Team members", value: "3" },
+      { name: "AI recommendations", value: "Basic" },
+      { name: "Email reports", value: true },
+      { name: "Chat support", value: true },
+      { name: "API access", value: false },
+      { name: "Custom integrations", value: false },
+      { name: "Dedicated success manager", value: false },
+    ],
+    cta: "Start free trial",
+    popular: false,
+  },
+  {
+    name: "Professional",
+    price: { monthly: 99, yearly: 79 },
+    description: "For growing businesses that need deeper insights and faster data",
+    features: [
+      { name: "Competitors tracked", value: "10" },
+      { name: "Price scans", value: "Hourly" },
+      { name: "Team members", value: "10" },
+      { name: "AI recommendations", value: "Advanced" },
+      { name: "Email reports", value: true },
+      { name: "Slack & Teams integration", value: true },
+      { name: "API access", value: true },
+      { name: "Priority support", value: true },
+      { name: "Dedicated success manager", value: false },
+    ],
+    cta: "Start free trial",
+    popular: true,
+  },
+  {
+    name: "Enterprise",
+    price: { monthly: 199, yearly: 159 },
+    description: "For large organizations with advanced requirements and scale",
+    features: [
+      { name: "Competitors tracked", value: "Unlimited" },
+      { name: "Price scans", value: "Real-time" },
+      { name: "Team members", value: "Unlimited" },
+      { name: "AI recommendations", value: "Custom models" },
+      { name: "Email reports", value: true },
+      { name: "All integrations", value: true },
+      { name: "API access", value: true },
+      { name: "SSO & SAML", value: true },
+      { name: "Dedicated success manager", value: true },
+    ],
+    cta: "Contact sales",
+    popular: false,
+  },
+];
+
+const COMPARISON = [
+  { name: "DIY Analyst", price: "$5,400+/mo", sub: "1 FTE at $65k/yr", tone: "muted" },
+  { name: "Enterprise Tools", price: "$3,800+/mo", sub: "Pricewatch, Engage3, etc.", tone: "muted" },
+  { name: "Sova Professional", price: "$99/mo", sub: "Self-serve, cancel anytime", tone: "primary" },
 ];
 
 const FAQ = [
-  ["How does Sova actually track competitors?", "We use a network of headless browsers in 14 countries to scan competitor catalogs hourly. Every product change is fingerprinted, diffed against history, and timelined. You see what changed, when, and what to do about it — within minutes."],
-  ["Is this legal? Can my competitors block you?", "Yes. We only scan public storefront data, the same way Google does. We respect robots.txt and rate-limit aggressively. In four years, no merchant has ever been blocked from a competitor we monitor."],
-  ["What does the Shopify integration do?", "Read access to your catalog and orders so we can rank impact. Write access — only when you click Apply — so we can push price changes. Every write is audited and reversible. We never touch customers, fulfillment, or finance."],
-  ["What if I have more than 5 competitors?", "Tell us. 5 covers 92% of brands we work with. If you genuinely need more, we'll quote it case-by-case. We won't push you into a tier you don't need."],
-  ["Why is this only $29 a month?", "Because the cost of running it for one more brand is essentially zero, and we'd rather have ten thousand happy operators than a hundred enterprise contracts. Pricing is the product."],
-  ["What happens if I cancel?", "You stop being charged immediately. Your data is exported on request and deleted within 30 days. No hostage-taking. No retention call."],
+  {
+    q: "How does Sova track competitors?",
+    a: "We use a network of headless browsers across 14 countries to scan competitor catalogs. Every product change is fingerprinted, compared against history, and surfaced to you within minutes. We respect robots.txt and rate-limit responsibly.",
+  },
+  {
+    q: "Can my competitors block Sova?",
+    a: "We only scan publicly available storefront data, the same way search engines do. In over four years of operation, no merchant has ever been blocked from monitoring a competitor.",
+  },
+  {
+    q: "What does the Shopify integration do?",
+    a: "Read access to your catalog and orders for impact ranking. Write access (only when you click Apply) to push price changes. Every write is audited and reversible. We never touch customers, fulfillment, or finance.",
+  },
+  {
+    q: "What if I need more than 10 competitors?",
+    a: "Our Enterprise plan includes unlimited competitor tracking. If you&apos;re on Professional and need more, reach out and we&apos;ll find the right solution for your needs.",
+  },
+  {
+    q: "Is there a free trial?",
+    a: "Yes! All plans include a 14-day free trial with full access to features. No credit card required to start. You can upgrade, downgrade, or cancel at any time.",
+  },
+  {
+    q: "What happens when I cancel?",
+    a: "You stop being charged immediately. Your data is exported on request and deleted within 30 days. No retention calls, no hostage-taking.",
+  },
 ];
 
 export default function PricingPage() {
-  return (
-    <div>
-      <section className="border-b border-ink-2 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gridline opacity-[0.3] pointer-events-none" />
-        <div className="relative max-w-[1200px] mx-auto px-6 pt-24 pb-16 text-center">
-          <div className="label-eyebrow text-amber-brand">PRICING · ONE PLAN</div>
-          <h1 className="font-serif text-d1 mt-6" style={{ fontSize: "clamp(56px, 7vw, 96px)", lineHeight: 0.98, letterSpacing: "-0.03em" }}>
-            $29 a month.<br /><span className="italic text-d2">No tiers. No surprises.</span>
-          </h1>
-          <p className="text-[17px] text-d2 mt-8 max-w-[600px] mx-auto leading-[1.55]">
-            One plan. Everything included. We make pricing simple because our product is the opposite.
-          </p>
-        </div>
-      </section>
+  const [isYearly, setIsYearly] = useState(false);
 
-      {/* Plan card */}
-      <section className="bg-ink-0 border-b border-ink-2">
-        <div className="max-w-[760px] mx-auto px-6 py-20">
-          <div className="border border-ink-2 rounded-2xl bg-ink-1 overflow-hidden">
-            <div className="p-10">
-              <div className="flex items-baseline justify-between">
-                <div>
-                  <div className="font-serif text-d1" style={{ fontSize: 36 }}>Sova Growth</div>
-                  <div className="label-eyebrow text-d4 mt-2">EVERYTHING. ONE PRICE.</div>
-                </div>
-                <div className="flex items-baseline gap-1">
-                  <span className="font-serif text-d1 tnum" style={{ fontSize: 72, letterSpacing: "-0.025em", lineHeight: 1 }}>$29</span>
-                  <span className="text-[16px] text-d3">/month</span>
-                </div>
-              </div>
-              <Link to="/app" className="mt-8 block w-full text-center bg-amber-brand text-ink-1 font-semibold text-[15px] py-3.5 rounded-md hover:brightness-95 transition-[filter] duration-[80ms]">
-                Start for $29/month →
-              </Link>
-              <p className="text-[12px] text-d4 text-center mt-4 label-mono">NO SETUP · CANCEL ANYTIME · 10-MIN INSTALL</p>
-            </div>
-            <div className="border-t border-ink-2 px-10 py-8 bg-ink-2/30">
-              <div className="label-eyebrow text-d4 mb-5">WHAT'S INCLUDED</div>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
-                {FEATURES.map(([f]) => (
-                  <li key={f as string} className="flex items-start gap-2.5 text-[13px] text-d2">
-                    <svg width="14" height="14" viewBox="0 0 14 14" className="mt-1 shrink-0"><path d="M2 7.5L5.5 11L12 3.5" stroke="#E8A020" strokeWidth="1.6" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </div>
+  return (
+    <div className="bg-background">
+      {/* Hero */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 gradient-hero" />
+        <div className="absolute inset-0 bg-grid-subtle opacity-40" />
+        
+        <div className="relative max-w-6xl mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-20 text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-soft text-primary-brand text-sm font-medium mb-6">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M8 1.5L9.5 6.5L14.5 8L9.5 9.5L8 14.5L6.5 9.5L1.5 8L6.5 6.5L8 1.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            Simple, transparent pricing
+          </div>
+          
+          <h1 
+            className="font-serif text-foreground" 
+            style={{ fontSize: "clamp(40px, 7vw, 64px)", lineHeight: 1.05, letterSpacing: "-0.02em" }}
+          >
+            Choose your plan
+          </h1>
+          <p className="text-lg md:text-xl text-secondary mt-6 max-w-2xl mx-auto leading-relaxed">
+            Start free, scale as you grow. All plans include a 14-day trial with full features.
+          </p>
+
+          {/* Billing Toggle */}
+          <div className="mt-10 inline-flex items-center gap-4 p-1.5 bg-surface rounded-full border border-border">
+            <button
+              onClick={() => setIsYearly(false)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                !isYearly 
+                  ? "bg-foreground text-background shadow-sm" 
+                  : "text-secondary hover:text-foreground"
+              }`}
+            >
+              Monthly
+            </button>
+            <button
+              onClick={() => setIsYearly(true)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
+                isYearly 
+                  ? "bg-foreground text-background shadow-sm" 
+                  : "text-secondary hover:text-foreground"
+              }`}
+            >
+              Yearly
+              <span className="text-xs text-primary-brand font-semibold">Save 20%</span>
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Compare with the alternative */}
-      <section className="bg-ink-1 border-b border-ink-2">
-        <div className="max-w-[1200px] mx-auto px-6 py-24">
-          <SectionLabel index="02" label="The actual cost comparison" />
-          <h2 className="font-serif text-d1 mt-8 max-w-[760px]" style={{ fontSize: 44, lineHeight: 1.05, letterSpacing: "-0.02em" }}>
-            What competitive intelligence costs you today.
-          </h2>
+      {/* Pricing Cards */}
+      <section className="py-12 md:py-16 bg-background">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {PLANS.map((plan, i) => (
+              <div 
+                key={i} 
+                className={`relative rounded-2xl border p-8 transition-all duration-200 ${
+                  plan.popular 
+                    ? "bg-foreground text-background border-foreground shadow-elevated scale-[1.02] md:scale-105" 
+                    : "bg-surface border-border hover:border-border-strong hover:shadow-card"
+                }`}
+              >
+                {plan.popular && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <span className="bg-primary-brand text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+                      Most popular
+                    </span>
+                  </div>
+                )}
+                
+                <div className="mb-8">
+                  <h3 className={`text-xl font-semibold ${plan.popular ? "text-background" : "text-foreground"}`}>
+                    {plan.name}
+                  </h3>
+                  <div className="flex items-baseline gap-1 mt-3">
+                    <span 
+                      className={`font-serif ${plan.popular ? "text-background" : "text-foreground"}`}
+                      style={{ fontSize: 56, letterSpacing: "-0.02em", lineHeight: 1 }}
+                    >
+                      ${isYearly ? plan.price.yearly : plan.price.monthly}
+                    </span>
+                    <span className={plan.popular ? "text-background/60" : "text-muted"}>/month</span>
+                  </div>
+                  {isYearly && (
+                    <div className={`mt-2 text-sm ${plan.popular ? "text-background/60" : "text-muted"}`}>
+                      Billed ${(isYearly ? plan.price.yearly : plan.price.monthly) * 12}/year
+                    </div>
+                  )}
+                  <p className={`mt-4 text-sm leading-relaxed ${plan.popular ? "text-background/70" : "text-secondary"}`}>
+                    {plan.description}
+                  </p>
+                </div>
 
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-px bg-ink-2 border border-ink-2 rounded-lg overflow-hidden">
-            {[
-              { name: "DIY analyst", price: "$5,400 /mo", sub: "1 FTE @ $65k/yr fully loaded", items: ["Manual scraping", "Excel-based recs", "Monday meetings", "No execution"], tone: "muted" },
-              { name: "Enterprise PI tool", price: "$3,800 /mo", sub: "Pricewatch / Engage3 / Wiser", items: ["Heavy onboarding", "Annual contract", "Slow data refresh", "No execution"], tone: "muted" },
-              { name: "Sova Growth", price: "$29 /mo", sub: "Self-serve, monthly", items: ["Hourly scans", "AI recommendations", "Daily ranked actions", "One-click apply"], tone: "amber" },
-            ].map((p) => (
-              <div key={p.name} className={`p-8 ${p.tone === "amber" ? "bg-ink-1 ring-1 ring-amber-brand/30" : "bg-ink-1"}`}>
-                <div className="font-serif text-d1" style={{ fontSize: 22 }}>{p.name}</div>
-                <div className={`font-serif tnum mt-4 ${p.tone === "amber" ? "text-amber-brand" : "text-d1"}`} style={{ fontSize: 36, letterSpacing: "-0.02em" }}>{p.price}</div>
-                <div className="text-[12px] text-d4 label-mono mt-1">{p.sub}</div>
-                <ul className="mt-6 space-y-2.5 border-t border-ink-2 pt-5">
-                  {p.items.map((i) => (
-                    <li key={i} className="flex items-start gap-2 text-[13px] text-d2">
-                      <span className={p.tone === "amber" ? "text-amber-brand mt-0.5" : "text-d4 mt-0.5"}>→</span>
-                      {i}
-                    </li>
-                  ))}
-                </ul>
+                <Link
+                  to={plan.name === "Enterprise" ? "#contact" : "/app"}
+                  className={`block w-full text-center font-semibold text-sm py-3.5 rounded-lg transition-all mb-8 ${
+                    plan.popular
+                      ? "bg-background text-foreground hover:bg-background/90 shadow-sm"
+                      : "bg-foreground text-background hover:bg-foreground/90"
+                  }`}
+                >
+                  {plan.cta}
+                </Link>
+
+                <div className={`border-t pt-6 ${plan.popular ? "border-background/20" : "border-border"}`}>
+                  <div className={`text-xs font-semibold uppercase tracking-wider mb-4 ${plan.popular ? "text-background/50" : "text-muted"}`}>
+                    What&apos;s included
+                  </div>
+                  <ul className="space-y-3">
+                    {plan.features.map((feature, j) => (
+                      <li key={j} className="flex items-center justify-between text-sm">
+                        <span className={plan.popular ? "text-background/80" : "text-secondary"}>
+                          {feature.name}
+                        </span>
+                        {typeof feature.value === "boolean" ? (
+                          feature.value ? (
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-primary-brand">
+                              <path d="M3 8L6.5 11.5L13 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          ) : (
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={plan.popular ? "text-background/30" : "text-muted/50"}>
+                              <path d="M4 12L12 4M4 4L12 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                            </svg>
+                          )
+                        ) : (
+                          <span className={`font-medium ${plan.popular ? "text-background" : "text-foreground"}`}>
+                            {feature.value}
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <p className="text-center text-sm text-muted mt-8">
+            All plans include a 14-day free trial. No credit card required to start.
+          </p>
+        </div>
+      </section>
+
+      {/* Cost Comparison */}
+      <section className="py-20 md:py-28 bg-surface-muted">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <SectionLabel index="02" label="The real cost" />
+            <h2 
+              className="font-serif text-foreground mt-6" 
+              style={{ fontSize: "clamp(28px, 4vw, 40px)", lineHeight: 1.1, letterSpacing: "-0.02em" }}
+            >
+              What competitive intelligence actually costs today
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {COMPARISON.map((item, i) => (
+              <div 
+                key={i} 
+                className={`p-6 rounded-2xl border transition-all ${
+                  item.tone === "primary" 
+                    ? "bg-surface border-primary-brand/30 shadow-card ring-1 ring-primary-brand/10" 
+                    : "bg-surface border-border"
+                }`}
+              >
+                <div className="text-lg font-semibold text-foreground">{item.name}</div>
+                <div 
+                  className={`font-serif mt-3 ${item.tone === "primary" ? "text-primary-brand" : "text-foreground"}`}
+                  style={{ fontSize: 36, letterSpacing: "-0.02em", lineHeight: 1 }}
+                >
+                  {item.price}
+                </div>
+                <div className="text-sm text-muted mt-2">{item.sub}</div>
               </div>
             ))}
           </div>
@@ -112,30 +279,73 @@ export default function PricingPage() {
       </section>
 
       {/* FAQ */}
-      <section className="bg-ink-0 border-b border-ink-2">
-        <div className="max-w-[920px] mx-auto px-6 py-24">
-          <SectionLabel index="03" label="Frequently asked" />
-          <div className="mt-10 divide-y divide-ink-2 border-y border-ink-2">
-            {FAQ.map(([q, a]) => (
-              <details key={q} className="group">
-                <summary className="cursor-pointer py-6 flex items-start gap-6 list-none">
-                  <span className="label-mono text-d4 mt-1">[?]</span>
-                  <span className="flex-1 text-[18px] text-d1 font-medium">{q}</span>
-                  <span className="text-d3 text-[20px] transition-transform group-open:rotate-45 select-none">+</span>
+      <section className="py-20 md:py-28 bg-background">
+        <div className="max-w-3xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <SectionLabel index="03" label="FAQ" />
+            <h2 
+              className="font-serif text-foreground mt-6" 
+              style={{ fontSize: "clamp(28px, 4vw, 40px)", lineHeight: 1.1, letterSpacing: "-0.02em" }}
+            >
+              Frequently asked questions
+            </h2>
+          </div>
+
+          <div className="divide-y divide-border border-y border-border">
+            {FAQ.map((item, i) => (
+              <details key={i} className="group">
+                <summary className="cursor-pointer py-5 flex items-center justify-between list-none">
+                  <span className="text-base font-medium text-foreground pr-4">{item.q}</span>
+                  <svg 
+                    width="20" 
+                    height="20" 
+                    viewBox="0 0 20 20" 
+                    fill="none" 
+                    className="shrink-0 text-muted transition-transform group-open:rotate-45"
+                  >
+                    <path d="M10 4V16M4 10H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
                 </summary>
-                <p className="text-[14px] text-d2 leading-[1.7] pb-6 pl-12 max-w-[680px]">{a}</p>
+                <p className="text-secondary leading-relaxed pb-5 pr-8">{item.a}</p>
               </details>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="bg-ink-1">
-        <div className="max-w-[1100px] mx-auto px-6 py-28 text-center">
-          <h2 className="font-serif text-d1" style={{ fontSize: 52, lineHeight: 1.05, letterSpacing: "-0.025em" }}>
-            $29 a month, forever.<br /><span className="italic text-amber-brand">Or until your competitors hire us first.</span>
+      {/* CTA */}
+      <section className="py-20 md:py-28 bg-foreground text-background relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-subtle opacity-5" />
+        <div className="relative max-w-4xl mx-auto px-6 text-center">
+          <h2 
+            className="font-serif" 
+            style={{ fontSize: "clamp(32px, 5vw, 48px)", lineHeight: 1.1, letterSpacing: "-0.02em" }}
+          >
+            Ready to get started?
           </h2>
-          <div className="mt-10 flex items-center justify-center"><CTA /></div>
+          <p className="text-background/70 mt-4 text-lg">
+            Join thousands of businesses using Sova to stay ahead of their competition.
+          </p>
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              to="/app"
+              className="inline-flex items-center gap-2 bg-background text-foreground font-semibold text-[15px] px-6 py-3.5 rounded-lg hover:bg-background/90 transition-all shadow-sm"
+            >
+              Start free trial
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M2.5 6H9.5M9.5 6L6 2.5M9.5 6L6 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </Link>
+            <Link
+              to="#contact"
+              className="inline-flex items-center gap-2 text-background/80 hover:text-background font-medium text-[15px] px-4 py-3.5 transition-colors"
+            >
+              Talk to sales
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M2.5 6H9.5M9.5 6L6 2.5M9.5 6L6 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </Link>
+          </div>
         </div>
       </section>
     </div>

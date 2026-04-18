@@ -1,64 +1,95 @@
-import { CTA, SectionLabel } from "@/components/sova/Marketing";
+import { Link } from "react-router-dom";
+import { SectionLabel, Badge } from "@/components/sova/Marketing";
+
+const STATS = [
+  { value: "500+", label: "Active customers" },
+  { value: "$42M", label: "Revenue protected Q1" },
+  { value: "1.2M", label: "SKUs monitored daily" },
+  { value: "97", label: "Net Promoter Score" },
+];
 
 const STORIES = [
   {
-    brand: "Maison Élan",
-    sector: "Premium DTC apparel · Stockholm",
-    headline: "$184k of weekly revenue, defended.",
+    brand: "Maison Elan",
+    sector: "Premium DTC Apparel",
+    location: "Stockholm",
+    headline: "$184k of weekly revenue, defended",
     quote: "We replaced a 4-person competitive analyst function with Sova. The pricing recommendations alone paid for the year in the first 11 days.",
     person: "Elin Magnusson",
     role: "Head of Merchandising",
-    metrics: [["+12.4%", "weekly revenue"], ["$42k", "protected last quarter"], ["3", "actions per morning"]],
+    metrics: [
+      { value: "+12.4%", label: "Weekly revenue increase" },
+      { value: "$42k", label: "Protected last quarter" },
+      { value: "3", label: "Actions per morning" },
+    ],
   },
   {
     brand: "Sundae",
-    sector: "Resort & swim · Lisbon",
-    headline: "Caught a competitor's launch 6 days early.",
-    quote: "Sova's market feed surfaced a competitor restocking our exact silhouette before they'd even posted on social. We adjusted inventory the same hour.",
-    person: "Tomás Reis",
-    role: "Founder",
-    metrics: [["6 days", "early-warning lead time"], ["28", "SKUs repriced"], ["+18%", "sell-through"]],
+    sector: "Resort & Swim",
+    location: "Lisbon",
+    headline: "Caught a competitor&apos;s launch 6 days early",
+    quote: "Sova&apos;s market feed surfaced a competitor restocking our exact silhouette before they&apos;d even posted on social. We adjusted inventory the same hour.",
+    person: "Tomas Reis",
+    role: "Founder & CEO",
+    metrics: [
+      { value: "6 days", label: "Early-warning lead time" },
+      { value: "28", label: "SKUs repriced" },
+      { value: "+18%", label: "Sell-through rate" },
+    ],
   },
   {
     brand: "Stillwater",
-    sector: "Performance basics · Brooklyn",
-    headline: "From spreadsheet hell to one-click ops.",
+    sector: "Performance Basics",
+    location: "Brooklyn",
+    headline: "From spreadsheet hell to one-click ops",
     quote: "We had four people maintaining a competitor pricing sheet. Now Sova does it hourly and they ship product instead.",
     person: "Naomi Park",
     role: "VP Operations",
-    metrics: [["4 → 0", "FTEs on competitor tracking"], ["$210k", "annual cost saved"], ["100%", "team retention"]],
+    metrics: [
+      { value: "4 to 0", label: "FTEs on competitor tracking" },
+      { value: "$210k", label: "Annual cost saved" },
+      { value: "100%", label: "Team retention" },
+    ],
   },
 ];
 
 export default function Customers() {
   return (
-    <div>
-      <section className="border-b border-ink-2 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gridline opacity-[0.3]" />
-        <div className="relative max-w-[1200px] mx-auto px-6 pt-24 pb-20 text-center">
-          <div className="label-eyebrow text-amber-brand">CUSTOMERS</div>
-          <h1 className="font-serif text-d1 mt-6" style={{ fontSize: "clamp(48px, 7vw, 88px)", lineHeight: 1, letterSpacing: "-0.03em" }}>
-            Operators who'd rather<br /><span className="italic text-amber-brand">ship than scroll.</span>
+    <div className="bg-background">
+      {/* Hero */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 gradient-hero" />
+        <div className="absolute inset-0 bg-grid-subtle opacity-40" />
+        
+        <div className="relative max-w-6xl mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-20 text-center">
+          <Badge variant="primary">Customer Stories</Badge>
+          
+          <h1 
+            className="font-serif text-foreground mt-6" 
+            style={{ fontSize: "clamp(40px, 7vw, 64px)", lineHeight: 1.05, letterSpacing: "-0.02em" }}
+          >
+            Operators who&apos;d rather{" "}
+            <span className="text-primary-brand italic">ship than scroll</span>
           </h1>
-          <p className="text-[17px] text-d2 mt-8 max-w-[620px] mx-auto leading-[1.55]">
-            Three hundred and sixty Shopify brands run their morning on Sova. These are some of their stories.
+          <p className="text-lg md:text-xl text-secondary mt-6 max-w-2xl mx-auto leading-relaxed">
+            Hundreds of businesses run their morning on Sova. Here are some of their stories.
           </p>
         </div>
       </section>
 
-      {/* Aggregate metrics */}
-      <section className="bg-ink-1 border-b border-ink-2">
-        <div className="max-w-[1200px] mx-auto px-6 py-20">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-ink-2 border-y border-ink-2">
-            {[
-              ["360", "Brands on Sova"],
-              ["$42M", "Revenue protected / Q1"],
-              ["1.2M", "SKUs monitored daily"],
-              ["97 NPS", "Customer satisfaction"],
-            ].map(([n, l], i) => (
-              <div key={i} className="px-6 py-10">
-                <div className="font-serif text-d1 tnum" style={{ fontSize: 44, letterSpacing: "-0.02em", lineHeight: 1 }}>{n}</div>
-                <div className="label-eyebrow text-d4 mt-3">{l}</div>
+      {/* Stats */}
+      <section className="py-12 bg-surface border-y border-border">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4">
+            {STATS.map((stat, i) => (
+              <div key={i} className="text-center">
+                <div 
+                  className="font-serif text-foreground tnum" 
+                  style={{ fontSize: "clamp(32px, 5vw, 48px)", lineHeight: 1, letterSpacing: "-0.02em" }}
+                >
+                  {stat.value}
+                </div>
+                <div className="text-sm text-muted mt-2 font-medium">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -66,35 +97,54 @@ export default function Customers() {
       </section>
 
       {/* Stories */}
-      {STORIES.map((s, i) => (
-        <section key={s.brand} className={`border-b border-ink-2 ${i % 2 === 0 ? "bg-ink-1" : "bg-ink-0"}`}>
-          <div className="max-w-[1200px] mx-auto px-6 py-24">
-            <SectionLabel index={`0${i + 1}`} label={s.brand} />
-            <div className="mt-10 grid grid-cols-1 md:grid-cols-[1.1fr_1fr] gap-16 items-start">
+      {STORIES.map((story, i) => (
+        <section 
+          key={story.brand} 
+          className={`py-20 md:py-28 ${i % 2 === 0 ? "bg-background" : "bg-surface-muted"}`}
+        >
+          <div className="max-w-6xl mx-auto px-6">
+            <SectionLabel index={`0${i + 1}`} label={story.brand} />
+            
+            <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
               <div>
-                <div className="label-eyebrow text-d4">{s.sector}</div>
-                <h2 className="font-serif text-d1 mt-5" style={{ fontSize: 44, lineHeight: 1.05, letterSpacing: "-0.02em" }}>
-                  {s.headline}
+                <div className="text-sm text-muted font-medium">
+                  {story.sector} &middot; {story.location}
+                </div>
+                <h2 
+                  className="font-serif text-foreground mt-4" 
+                  style={{ fontSize: "clamp(28px, 4vw, 40px)", lineHeight: 1.15, letterSpacing: "-0.02em" }}
+                >
+                  {story.headline}
                 </h2>
-                <blockquote className="font-serif text-d2 mt-8 italic" style={{ fontSize: 22, lineHeight: 1.4 }}>
-                  <span className="text-amber-brand not-italic">"</span>{s.quote}<span className="text-amber-brand not-italic">"</span>
+                
+                <blockquote className="mt-8 text-lg text-foreground leading-relaxed border-l-2 border-primary-brand pl-6 italic">
+                  &ldquo;{story.quote}&rdquo;
                 </blockquote>
-                <div className="mt-6 flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-canvas-3 text-ink-1 text-[12px] flex items-center justify-center font-medium">
-                    {s.person.split(" ").map((p) => p[0]).join("")}
+                
+                <div className="mt-8 flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-surface-muted border border-border flex items-center justify-center text-sm font-semibold text-secondary">
+                    {story.person.split(" ").map((p) => p[0]).join("")}
                   </div>
                   <div>
-                    <div className="text-[14px] text-d1">{s.person}</div>
-                    <div className="text-[12px] text-d4 label-mono">{s.role.toUpperCase()} · {s.brand.toUpperCase()}</div>
+                    <div className="font-semibold text-foreground">{story.person}</div>
+                    <div className="text-sm text-muted">{story.role} at {story.brand}</div>
                   </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-px bg-ink-2 border border-ink-2 rounded-lg overflow-hidden">
-                {s.metrics.map(([n, l]) => (
-                  <div key={l} className="bg-ink-1 px-6 py-8">
-                    <div className="font-serif text-amber-brand tnum" style={{ fontSize: 44, letterSpacing: "-0.02em", lineHeight: 1 }}>{n}</div>
-                    <div className="label-eyebrow text-d4 mt-3">{l}</div>
+              <div className="bg-surface rounded-2xl border border-border overflow-hidden shadow-card">
+                {story.metrics.map((metric, j) => (
+                  <div 
+                    key={j} 
+                    className={`px-8 py-6 ${j !== story.metrics.length - 1 ? "border-b border-border" : ""}`}
+                  >
+                    <div 
+                      className="font-serif text-primary-brand tnum" 
+                      style={{ fontSize: 40, letterSpacing: "-0.02em", lineHeight: 1 }}
+                    >
+                      {metric.value}
+                    </div>
+                    <div className="text-sm text-muted mt-2 font-medium">{metric.label}</div>
                   </div>
                 ))}
               </div>
@@ -103,12 +153,40 @@ export default function Customers() {
         </section>
       ))}
 
-      <section className="bg-ink-1">
-        <div className="max-w-[1100px] mx-auto px-6 py-28 text-center">
-          <h2 className="font-serif text-d1" style={{ fontSize: 52, lineHeight: 1.05, letterSpacing: "-0.025em" }}>
-            Be the next story<br /><span className="italic text-amber-brand">we publish here.</span>
+      {/* CTA */}
+      <section className="py-20 md:py-28 bg-foreground text-background relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-subtle opacity-5" />
+        <div className="relative max-w-4xl mx-auto px-6 text-center">
+          <h2 
+            className="font-serif" 
+            style={{ fontSize: "clamp(32px, 5vw, 48px)", lineHeight: 1.1, letterSpacing: "-0.02em" }}
+          >
+            Be the next story{" "}
+            <span className="italic text-primary-brand">we publish here</span>
           </h2>
-          <div className="mt-10"><CTA /></div>
+          <p className="text-background/70 mt-4 text-lg">
+            Join hundreds of businesses using Sova to stay ahead.
+          </p>
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              to="/app"
+              className="inline-flex items-center gap-2 bg-background text-foreground font-semibold text-[15px] px-6 py-3.5 rounded-lg hover:bg-background/90 transition-all shadow-sm"
+            >
+              Start free trial
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M2.5 6H9.5M9.5 6L6 2.5M9.5 6L6 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </Link>
+            <Link
+              to="/pricing"
+              className="inline-flex items-center gap-2 text-background/80 hover:text-background font-medium text-[15px] px-4 py-3.5 transition-colors"
+            >
+              View pricing
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M2.5 6H9.5M9.5 6L6 2.5M9.5 6L6 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </Link>
+          </div>
         </div>
       </section>
     </div>
