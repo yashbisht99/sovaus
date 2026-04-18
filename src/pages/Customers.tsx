@@ -1,5 +1,13 @@
 import { Link } from "react-router-dom";
 import { SectionLabel, Badge } from "@/components/sova/Marketing";
+import { 
+  FadeUp, 
+  StaggerContainer, 
+  StaggerItem, 
+  HoverCard,
+  RotatingGlow,
+  MorphingBlob
+} from "@/components/sova/AnimatedElements";
 
 const STATS = [
   { value: "500+", label: "Active customers" },
@@ -55,25 +63,34 @@ const STORIES = [
 
 export default function Customers() {
   return (
-    <div className="bg-background">
+    <div className="bg-background overflow-hidden">
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 gradient-hero" />
         <div className="absolute inset-0 bg-grid-subtle opacity-40" />
+        <RotatingGlow size={500} className="top-0 right-0 -translate-y-1/2 translate-x-1/2" />
+        <MorphingBlob size={400} className="bottom-0 left-0 translate-y-1/2 -translate-x-1/2" color="#14b8a6" />
         
-        <div className="relative max-w-6xl mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-20 text-center">
-          <Badge variant="primary">Customer Stories</Badge>
+        <div className="relative max-w-6xl mx-auto px-6 pt-24 pb-20 md:pt-32 md:pb-24 text-center">
+          <FadeUp>
+            <Badge variant="primary">Customer Stories</Badge>
+          </FadeUp>
           
-          <h1 
-            className="font-serif text-foreground mt-6" 
-            style={{ fontSize: "clamp(40px, 7vw, 64px)", lineHeight: 1.05, letterSpacing: "-0.02em" }}
-          >
-            Operators who&apos;d rather{" "}
-            <span className="text-primary-brand italic">ship than scroll</span>
-          </h1>
-          <p className="text-lg md:text-xl text-secondary mt-6 max-w-2xl mx-auto leading-relaxed">
-            Hundreds of businesses run their morning on Sova. Here are some of their stories.
-          </p>
+          <FadeUp delay={0.1}>
+            <h1 
+              className="font-serif text-foreground mt-8" 
+              style={{ fontSize: "clamp(42px, 8vw, 72px)", lineHeight: 1.02, letterSpacing: "-0.03em" }}
+            >
+              Operators who&apos;d rather{" "}
+              <span className="text-primary-brand italic">ship than scroll</span>
+            </h1>
+          </FadeUp>
+          
+          <FadeUp delay={0.2}>
+            <p className="text-lg md:text-xl text-secondary mt-6 max-w-2xl mx-auto leading-relaxed">
+              Hundreds of businesses run their morning on Sova. Here are some of their stories.
+            </p>
+          </FadeUp>
         </div>
       </section>
 
